@@ -32,7 +32,8 @@ public class Game {
     }
 
     private static void setFirstMove(Scanner scanner) {
-        System.out.println("\nI did not attend this class because I was competing in Informatrix in Romania.\nFrom what I heard, the task is to create the strongest ox bot.\nThe only constraint is that the player alwasys starts the game.");
+        System.out.println(
+                "\nI did not attend this class because I was competing in Informatrix in Romania.\nFrom what I heard, the task is to create the strongest ox bot.\nThe only constraint is that the player alwasys starts the game.");
         System.out.println("Choose your option.");
         System.out.println("'o' is the first player.");
         System.out.println("'x' is the second player.");
@@ -42,7 +43,7 @@ public class Game {
             Game.currentPlayer = scanner.next().charAt(0);
         } else {
             System.out.println("No input detected. Default = 'o'");
-            
+
             Game.currentPlayer = 'o';
         }
 
@@ -61,7 +62,7 @@ public class Game {
             System.out.print("Row: ");
 
             row = scanner.nextInt();
-            
+
             System.out.print("Column: ");
 
             column = scanner.nextInt();
@@ -87,10 +88,11 @@ public class Game {
                 if (board.getBoard()[row][column] != Game.currentPlayer) {
                     break;
                 }
+                if (row == board.getBoardSize() - 1 && board.getBoard()[row][column] == Game.currentPlayer) {
+                    Game.gameOver = true;
 
-                Game.gameOver = true;
-
-                break;
+                    break;
+                }
             }
 
         }
@@ -101,13 +103,35 @@ public class Game {
                 if (board.getBoard()[row][column] != Game.currentPlayer) {
                     break;
                 }
+                if (column == board.getBoardSize() - 1 && board.getBoard()[row][column] == Game.currentPlayer) {
+                    Game.gameOver = true;
 
-                Game.gameOver = true;
-                
-                break;
+                    break;
+                }
             }
         }
 
         // Check diagonally
+        for (int row = 0, column = 0; row < board.getBoardSize() && column < board.getBoardSize(); row++, column++) {
+            if (board.getBoard()[row][column] != Game.currentPlayer) {
+                break;
+            }
+            if (column == board.getBoardSize() - 1 && board.getBoard()[row][column] == Game.currentPlayer) {
+                Game.gameOver = true;
+
+                break;
+            }
+        }
+
+        for (int row = board.getBoardSize() - 1, column = 0; row >= 0 && column < board.getBoardSize(); row++, column--) {
+            if (board.getBoard()[row][column] != Game.currentPlayer) {
+                break;
+            }
+            if (column == board.getBoardSize() - 1 && board.getBoard()[row][column] == Game.currentPlayer) {
+                Game.gameOver = true;
+
+                break;
+            }
+        }
     }
 }

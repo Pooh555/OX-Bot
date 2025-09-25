@@ -10,9 +10,11 @@ public class Board {
     }
 
     private void setBoardSize(Scanner scanner) {
-        System.out.print("Enter board size (integer): ");
+        while (this.size <= 0) {
+            System.out.print("Enter board size (integer): ");
 
-        this.size = scanner.nextInt();    
+            this.size = scanner.nextInt();    
+        }
     }
     
     private void initializeBoard() {
