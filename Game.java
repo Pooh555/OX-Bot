@@ -47,7 +47,7 @@ public class Game {
         }
 
         if (Game.draw) {
-            System.out.println("Draw!");
+            System.out.println("\nDraw!");
         } else {
             System.out.println("\nGame over! Player " + currentPlayer + " won.");
         }
@@ -120,7 +120,7 @@ public class Game {
                     break;
                 }
             }
-            
+
             if (win) {
                 Game.gameOver = true;
 
