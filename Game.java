@@ -3,12 +3,15 @@ import java.util.Scanner;
 public class Game {
     private static char currentPlayer;
     private static boolean gameOver = false;
+    private static boolean draw = false;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Board board = new Board(scanner);
+        Bot bot = new Bot();
 
         Game.setFirstMove(scanner);
+        bot.setSearchDepth(9);
 
         while (true) {
             Game.playMove(board, scanner);
@@ -24,9 +27,30 @@ public class Game {
             } else if (Game.currentPlayer == 'o') {
                 Game.currentPlayer = 'x';
             }
+
+            int[] move = bot.getMove(board);
+
+            board.updateBoard(move[0], move[1], Game.currentPlayer);
+            System.out.println("\nBot plays: (" + move[0] + ", " + move[1] + ")");
+            board.displayBoard();
+            checkGameStatus(board);
+
+            if (Game.gameOver) {
+                break;
+            }
+
+            if (Game.currentPlayer == 'x') {
+                Game.currentPlayer = 'o';
+            } else if (Game.currentPlayer == 'o') {
+                Game.currentPlayer = 'x';
+            }
         }
 
-        System.out.println("\nGame over! Player " + currentPlayer + " won.");
+        if (Game.draw) {
+            System.out.println("Draw!");
+        } else {
+            System.out.println("\nGame over! Player " + currentPlayer + " won.");
+        }
 
         scanner.close();
     }
@@ -82,58 +106,103 @@ public class Game {
     }
 
     private static void checkGameStatus(Board board) {
-        // Check vertically
-        for (int column = 0; column < board.getBoardSize(); column++) {
-            for (int row = 0; row < board.getBoardSize(); row++) {
-                if (board.getBoard()[row][column] != Game.currentPlayer) {
-                    break;
-                }
-                if (row == board.getBoardSize() - 1 && board.getBoard()[row][column] == Game.currentPlayer) {
-                    Game.gameOver = true;
+        char[][] b = board.getBoard();
+        int size = board.getBoardSize();
+
+        // Check rows
+        for (int row = 0; row < size; row++) {
+            boolean win = true;
+
+            for (int col = 0; col < size; col++) {
+                if (b[row][col] != Game.currentPlayer) {
+                    win = false;
 
                     break;
                 }
             }
-
-        }
-
-        // Check horizontally
-        for (int row = 0; row < board.getBoardSize(); row++) {
-            for (int column = 0; column < board.getBoardSize(); column++) {
-                if (board.getBoard()[row][column] != Game.currentPlayer) {
-                    break;
-                }
-                if (column == board.getBoardSize() - 1 && board.getBoard()[row][column] == Game.currentPlayer) {
-                    Game.gameOver = true;
-
-                    break;
-                }
-            }
-        }
-
-        // Check diagonally
-        // Check /
-        for (int row = 0, column = 0; row < board.getBoardSize() && column < board.getBoardSize(); row++, column++) {
-            if (board.getBoard()[row][column] != Game.currentPlayer) {
-                break;
-            }
-            if (column == board.getBoardSize() - 1 && board.getBoard()[row][column] == Game.currentPlayer) {
+            if (win) {
                 Game.gameOver = true;
 
-                break;
+                return;
+            }
+        }
+
+        // Check columns
+        for (int col = 0; col < size; col++) {
+            boolean win = true;
+
+            for (int row = 0; row < size; row++) {
+                if (b[row][col] != Game.currentPlayer) {
+                    win = false;
+
+                    break;
+                }
+            }
+            if (win) {
+                Game.gameOver = true;
+
+                return;
             }
         }
 
         // Check \
-        for (int row = board.getBoardSize() - 1, column = 0; row >= 0 && column < board.getBoardSize(); row++, column--) {
-            if (board.getBoard()[row][column] != Game.currentPlayer) {
-                break;
-            }
-            if (column == board.getBoardSize() - 1 && board.getBoard()[row][column] == Game.currentPlayer) {
-                Game.gameOver = true;
+        boolean win = true;
+        for (int i = 0; i < size; i++) {
+            if (b[i][i] != Game.currentPlayer) {
+                win = false;
 
                 break;
             }
         }
+        if (win) {
+            Game.gameOver = true;
+
+            return;
+        }
+
+        // Check /
+        win = true;
+        for (int i = 0; i < size; i++) {
+            if (b[i][size - 1 - i] != Game.currentPlayer) {
+                win = false;
+
+                break;
+            }
+        }
+        if (win) {
+            Game.gameOver = true;
+
+            return;
+        }
+
+        boolean full = true;
+
+        for (int row = 0; row < size; row++) {
+            for (int col = 0; col < size; col++) {
+                if (b[row][col] == '-') {
+                    full = false;
+
+                    break;
+                }
+            }
+        }
+        if (full) {
+            Game.gameOver = true;
+            Game.draw = true;
+        }
+    }
+
+    public static char getCurrentPlayer() {
+        return Game.currentPlayer;
+    }
+
+    public static char getOpponentPlayer() {
+        if (Game.currentPlayer == 'x') {
+            return 'o';
+        } else if (Game.currentPlayer == 'o') {
+            return 'x';
+        }
+
+        return '-';
     }
 }
