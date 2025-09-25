@@ -1,11 +1,11 @@
 import java.util.Scanner;
 
 public class Board {
-    private int size;
+    private int size = 3;
     private char board[][];
 
     public Board(Scanner scanner) {
-        this.setBoardSize(scanner);
+        // this.setBoardSize(scanner);
         this.initializeBoard();
     }
 
