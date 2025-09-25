@@ -120,6 +120,7 @@ public class Game {
                     break;
                 }
             }
+            
             if (win) {
                 Game.gameOver = true;
 
@@ -138,6 +139,7 @@ public class Game {
                     break;
                 }
             }
+
             if (win) {
                 Game.gameOver = true;
 
@@ -154,6 +156,7 @@ public class Game {
                 break;
             }
         }
+
         if (win) {
             Game.gameOver = true;
 
@@ -162,6 +165,7 @@ public class Game {
 
         // Check /
         win = true;
+
         for (int i = 0; i < size; i++) {
             if (b[i][size - 1 - i] != Game.currentPlayer) {
                 win = false;
@@ -169,6 +173,7 @@ public class Game {
                 break;
             }
         }
+
         if (win) {
             Game.gameOver = true;
 
@@ -186,6 +191,7 @@ public class Game {
                 }
             }
         }
+
         if (full) {
             Game.gameOver = true;
             Game.draw = true;
