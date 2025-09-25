@@ -112,6 +112,7 @@ public class Game {
         }
 
         // Check diagonally
+        // Check /
         for (int row = 0, column = 0; row < board.getBoardSize() && column < board.getBoardSize(); row++, column++) {
             if (board.getBoard()[row][column] != Game.currentPlayer) {
                 break;
@@ -123,6 +124,7 @@ public class Game {
             }
         }
 
+        // Check \
         for (int row = board.getBoardSize() - 1, column = 0; row >= 0 && column < board.getBoardSize(); row++, column--) {
             if (board.getBoard()[row][column] != Game.currentPlayer) {
                 break;
