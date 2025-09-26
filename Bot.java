@@ -7,7 +7,7 @@ public class Bot {
     }
 
     private int minimax(Board board, int depth, boolean isMaximizing) {
-        if (checkGameStatus(board, Game.getCurrentPlayer())) return 10 - depth;
+        if (checkGameStatus(board, Game.getCurrentPlayer())) return 10   - depth;
         if (checkGameStatus(board, Game.getOpponentPlayer())) return depth - 10;
         if (isFull(board)) return 0;
 
