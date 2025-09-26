@@ -46,27 +46,34 @@ public class Bot {
     }
 
     private void calculate(int iteration, Board board) {
-    int bestVal = Integer.MIN_VALUE;
-    
-    for (int row = 0; row < board.getBoardSize(); row++) {
-        for (int column = 0; column < board.getBoardSize(); column++) {
-            if (board.getBoard()[row][column] == '-') {
-                board.updateBoard(row, column, Game.getCurrentPlayer());
-                
-                int moveVal = minimax(board, iteration, false);
-                
-                board.updateBoard(row, column, '-');
-                
-                if (moveVal > bestVal) {
-                    bestVal = moveVal;
-                    this.response[0] = row;
-                    this.response[1] = column;
+        int bestVal = Integer.MIN_VALUE;
+
+        for (int row = 0; row < board.getBoardSize(); row++) {
+            for (int column = 0; column < board.getBoardSize(); column++) {
+                if (board.getBoard()[row][column] == '-') {
+                    board.updateBoard(row, column, Game.getCurrentPlayer());
+
+                    // ✅ Check for immediate win
+                    if (checkGameStatus(board, Game.getCurrentPlayer())) {
+                        this.response[0] = row;
+                        this.response[1] = column;
+                        board.updateBoard(row, column, '-');
+                        return; // play winning move immediately
+                    }
+
+                    // Otherwise, use minimax
+                    int moveVal = minimax(board, iteration - 1, false);
+                    board.updateBoard(row, column, '-');
+
+                    if (moveVal > bestVal) {
+                        bestVal = moveVal;
+                        this.response[0] = row;
+                        this.response[1] = column;
+                    }
                 }
             }
         }
     }
-}
-
 
     public int[] getMove(Board board) {
         calculate(this.searchDepth, board);
